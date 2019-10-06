@@ -2,6 +2,7 @@
 
 Django website for running a holiday gift drive.
 
+
 ### Local development
 
 Requirements:
@@ -56,5 +57,15 @@ The four parts of the website:
 - The administrative site: http://localhost:8000/admin
 
 To re-create the local sqlite database, delete the `holiday.db` file and re-run migrations to create it again. Alternatelhy, run the `./recreatedb.sh` script.
+
+
+### Configuring
+
+The `settings.py` configuration can be modified to change strings for things such as the organization and site name and the list of drop-off locations for donations, as well as general Django configurations such as the database type and credentials and the email configuration.
+
+There are two placeholder images in the `holiday/static/holiday` directory, `logo.png` and `home_image.png`. Both appear on the visitor site home page. The logo image also appears in the site header and in HTML emails. Replace the images with other PNGs of the same size to customize the site.
+
+
+### Deploying
 
 For running in production, be sure to run `./manage.py collectstatic` to copy static files.
