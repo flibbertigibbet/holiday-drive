@@ -1,0 +1,55 @@
+{% extends 'registration/registration_base.html' %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block title %}Log in | Holiday Drive{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block navbar %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}
+  
+{% endblock %}
+
+{% block content_title %}{% blocktrans %}Login{% endblocktrans %}{% endblock %}
+{% block content %}
+ 
+<div id="content-main">
+<form action="{% url 'django.contrib.auth.views.login' %}" method="post" id="login-form">{% csrf_token %}
+  
+  {% if form.errors and not form.non_field_errors and not form.this_is_the_login_form.errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% endif %}
+  
+  {% bootstrap_form form %}
+  
+  <div class="btn-toolbar">
+    <div class="btn-group">
+      <button type="submit" class="btn btn-primary"
+        value="{% trans 'Log in' %}">{% trans 'Log in' %}</button>
+    </div> 
+  </div>
+  
+    <input type="hidden" name="this_is_the_login_form" value="1" />
+    <input type="hidden" name="next" value="{{ next }}" />
+  </div>
+  {% url 'admin_password_reset' as password_reset_url %}
+  {% if password_reset_url %}
+  <div class="input-group">
+    <div class="controls">
+        <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+    </div>
+  </div>
+  {% endif %}
+  </div>
+</form>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#id_username').attr('autocapitalize', 'off').focus();
+})
+</script>
+</div>
+{% endblock %}
+

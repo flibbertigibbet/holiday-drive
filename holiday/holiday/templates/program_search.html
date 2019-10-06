@@ -1,0 +1,165 @@
+{% extends "base_visitor.html" %}
+{% load i18n %}
+{% block extrasrc %}
+  {% load static %}
+  {% load jstemplate %}
+  <script src="{% static 'holiday/js/searchprograms.min.handlebars' %}"></script>
+{% endblock %}
+{% load staticfiles %}
+{% block pretitle %}
+  <ol class="breadcrumb lead panel-heading">
+    <li class="active"><a
+    href="{% url 'holiday.visitor_views.holiday_drive' %}">Holiday Drive</a></li>
+    <li>Search Programs</li>
+  </ol>
+{% endblock %}
+{% block content %}
+  <p class="lead"><strong>View programs available to sponsor</strong></p>
+  {% if form.errors and not form.non_field_errors and not form.non_form_errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% else %}{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+    {% endfor %}{% endif %}
+  {% endif %}
+<!-- TODO: re-enable program search or remove
+  <div class="list-group">
+    <a class="list-group-item accordion-toggle" data-toggle="collapse"
+        href="#collapseSearch" data-parent="#accordion"
+        data-original-title="click here to show or hide the search form" rel="tooltip">
+      <p id="searchBar" class="lead list-group-item-heading"><strong>Search options</strong></p></a>
+      <div id="collapseSearch" class="panel-collapse collapse in">
+        <div class="form-group form-horizontal form-group-lg">
+          <form id="myform" action="." method="post" role="form">{% csrf_token %}
+            {% for field in form %}
+              <div class="list-group-item collapse"><div class="select-div">
+                <label class="col-md-2 control-label" for="input-group-{{ field.name }}">{{ field.label }}</label>
+                <div class="input-group col-md-6" id="input-group-{{ field.name }}">
+                  <span class="input-group-addon input-lg">
+                    <input type="checkbox" id="use-{{ field.name }}">
+                  </span>
+                  {{ field }}
+                </div></div></div>
+            {% endfor %}
+            <div class="list-group-item collapse">
+            <div class="btn-toolbar">
+              <a href="javascript:void(0)" onclick="clearForm()"
+                class="btn btn-default pull-left"
+                data-original-title="clear search form" rel="tooltip">Clear</a>
+              <button type="submit" data-original-title="search programs available to sponsor"
+                rel="tooltip" class="btn btn-primary pull-right">
+              <span class="glyphicon glyphicon-filter"></span> Search</button>
+            </div></div>
+          </form>
+        </div>
+      </div>
+    </div> -->
+    <a id="loadBtn" class="list-group-item btn btn-default"
+      href="javascript:void(0)" onclick="loadMore()">
+      <div class="list-group-item-heading lead"
+      style="color:grey;">Show more results</div></a>
+    <li id="waitAnimation" hidden="true" class="list-group-item"><img
+      class="img-responsive" style="margin:0 auto;"
+      src="{% static 'holiday/ajax-loader.gif' %}"></li>
+  </div>
+{% endblock %}
+{% block extrascript %}
+  var alreadyLoading = false;
+  var resultPage = 1;
+  var json_url = "{{ json_url }}";
+  function loadMore() {
+    alreadyLoading = true;
+    $('#loadBtn').hide();
+    $('#waitAnimation').show();
+    addResults();
+    //window.setTimeout(addResults, 1000); // test loading animation
+  }
+  function addResults() {
+    $.getJSON(json_url + resultPage, function(data) {
+      data = data['programsearch'];
+      var resultCt = data['count']; // total result count
+      var lastPage = data['last_page'];
+      var resultMsg = '';
+      if (resultPage == 1) {
+        if (resultCt > 1) {
+          resultMsg = " (" + resultCt.toString() + " matches)";
+        } else if (resultCt == 0) {
+          resultMsg = " (No programs found for search.)";
+        } else {
+          resultMsg = " (" + resultCt.toString() + " match)";
+        }
+      }
+      // TODO: re-enable search or remove
+      //$('#searchBar').append(resultMsg);
+      //console.log(Handlebars.templates);
+      var html = Handlebars.templates['searchprograms'](data);
+      $('#loadBtn').before(html);
+      $("a").tooltip();
+      $("button").tooltip();
+      resultPage += 1;
+      $('#waitAnimation').hide();
+      if (!lastPage) {
+        $('#loadBtn').show();
+        alreadyLoading = false; // leave true if no more results to fetch
+      }
+    });
+  }
+  $(window).scroll(function() {
+    if ($(document).height() <= ($(window).height() +
+      $(window).scrollTop() + 80)) {
+		  if (!alreadyLoading) loadMore();
+		}
+  });
+  jQuery(function ($) {
+    $("a").tooltip();
+    $("button").tooltip();
+  });
+  function clearForm() {
+    {% for field in form %}
+      var fieldElem = document.getElementById("id_{{ field.name }}");
+      var checkElem = document.getElementById("use-{{ field.name }}");
+      fieldElem.value = "";
+      fieldElem.disabled = true;
+      checkElem.checked = false;
+    {% endfor %}
+  }
+  function enableDisableCheckbox(valueId, showHideId) {
+    if (document.getElementById(valueId).checked) {
+      document.getElementById(showHideId).disabled = false;
+    } else {
+      document.getElementById(showHideId).value = "";
+      document.getElementById(showHideId).disabled = true;
+    }
+  }
+  function confirm_sponsor(program_id, program_name) {
+    var modal = document.getElementById("modal-text");
+    var modal_btn = document.getElementById("confirm-button");
+    modal.innerHTML = "Are you sure you're ready to sponsor " + program_name + " now?<br \>" +
+      "Once sponsored, this program will not be available for anyone else to sponsor.";
+    modal_btn.href = "/sponsorprogram/" + program_id;
+    $('#confirmModal').modal({ keyboard: false });
+    return;
+  }
+  $(document).ready(function() {
+    /* TODO: re-enable program search or remove
+    {% for field in form %}
+      var fieldElem = document.getElementById("id_{{ field.name }}");
+      var checkElem = document.getElementById("use-{{ field.name }}");
+      checkElem.onchange = function() {
+        enableDisableCheckbox("use-{{ field.name }}", "id_{{ field.name }}");
+      };
+      fieldElem.className = "form-control input-lg";
+      if (fieldElem.value == "") {
+        fieldElem.disabled = true;
+      } else {
+        checkElem.checked = true;
+      }
+    {% endfor %}
+    */
+    if (!alreadyLoading) loadMore(); // get first page of results
+  });
+{% endblock %}

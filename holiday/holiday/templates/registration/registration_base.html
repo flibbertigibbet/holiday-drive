@@ -1,0 +1,190 @@
+{% load admin_static bootstrapped_goodies_tags %}{% load url from future %}{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    {% block extrastyle %}
+    {% endblock %}
+    
+    {% load static %}
+    <script src="{% static 'admin/js/jquery-1.9.1.min.js' %}"></script>
+    
+    {% load bootstrap3 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    
+    <style type="text/css">
+      body {
+        padding-top: 70px;
+        padding-bottom: 40px;
+      }
+      
+      /* overrides to default admin style */
+      a:active,
+      a:focus {
+          outline: none;
+      }
+      .sidebar-nav {
+          padding: 9px 0;
+      }
+      .control-group input[type=text] {
+          -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+          -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+          box-sizing: border-box;         /* Opera/IE 8+ */
+          height: 28px;
+      }
+      .control-group select {
+          -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+          -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+          box-sizing: border-box;         /* Opera/IE 8+ */
+      }
+      .controls > p {
+          padding-top: 5px;
+      }
+      .selector .selector-filter label {
+          display: none;
+      }
+      .selector h2 {
+          font-size: 100%;
+          margin: 0;
+      }
+      .checkbox{
+          padding-bottom: 5px;
+      }
+      .checkbox label {
+          margin-bottom: -20px;
+      }
+      fieldset.collapse {
+          height: inherit;
+      }
+      .add-row {
+          margin-bottom: 20px;
+      }
+      legend a:hover {
+          text-decoration: none;
+      }
+
+      .wide label {
+          width: auto;
+      }
+
+      /* change_list actions */
+      .actions select {
+          margin-top: 5px;
+      }
+      
+    
+      
+      .tooltip.in {opacity: 1} /* Hard to see against black text otherwise */
+    </style>
+    
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    
+</head>
+
+<body class="{% if is_popup %}popup{% endif %}{% block bodyclass %}{% endblock %}">
+
+<!-- Container -->
+<div class="container">
+
+    {% if not is_popup %}
+    <!-- Header -->
+    <div class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          {% block branding %}<a class="navbar-brand navbar-left" 
+          href="{% url 'holiday.views.programstaff_start' %}">Holiday Drive Staff Site</a>{% endblock %} 
+      </div>
+      <div class="navbar-collapse collapse navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+          {% if user.is_authenticated %}
+          <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong> <b class="caret"></b></a>
+              <ul class="dropdown-menu" role="menu">
+                {% if user.has_usable_password %}
+                <li><a href="/password_change/" onclick="change_password(); return false;">{% trans 'Change password' %}</a></li>
+                {% endif %}
+                <li><a href="{% url 'holiday.views.logout_page' %}"  onclick="logout(); return false;">{% trans 'Log out' %}</a></li>
+              </ul>
+          </li>
+          {% block userlinks %}
+          <!-- {% url 'django-admindocs-docroot' as docsroot %}
+          {% if docsroot %}
+          <li class="divider-vertical navbar-right"></li>
+          <li><a href="{{ docsroot }}">{% trans 'Documentation' %}</a></li>
+          {% endif %} -->
+          {% endblock %}
+          {% else %}
+            <li class="dropdown">
+              <a href="#">Not logged in</a></li>
+          {% endif %}
+          {% block nav-global %}{% endblock %}
+        </ul>
+      </div><!--/.navbar-collapse -->
+    </div>
+    <!-- END Header -->
+    {% endif %}
+
+    <!-- Content -->
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        <div class="panel panel-default">
+        <div class="panel-heading"><h3><strong>{% block content_title %}{% endblock %}</strong></h3></div>
+          <div class="panel-body">
+            {% block messages %}
+            {% if messages %}
+            <div class="row">
+                <div class="span12">
+                    <div class="alert alert-info">
+                        <ul class="unstyled">
+                            {% for message in messages %}
+                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endblock messages %}
+
+          {% block content %}{{ content }}{% endblock %}
+          </div> <!-- end panel -->
+          
+        {% block sidebar %}{% endblock %}
+    </div>
+    <!-- END Content -->
+
+    {% block footer %}<footer id="footer"></footer>{% endblock %}
+</div>
+<!-- END Container -->
+
+{% block script %}
+<script type="text/javascript">
+  function logout() {
+    var really = confirm("Logging out now will erase any unsaved data!\n\nContinue?");
+    if (really==true) {
+      window.location.replace("{% url 'holiday.views.logout_page' %}");
+    }
+    return really;
+  }
+  
+  function change_password() {
+    var really = confirm("Leaving this page now will erase any unsaved data!\n\nContinue?");
+    if (really==true) {
+      window.location.replace("/password_change/");
+    }
+    return really;
+  }
+  {% block extrascript %}
+  {% endblock %}
+</script>
+{% endblock %}
+</body>
+</html>
+

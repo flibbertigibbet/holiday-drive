@@ -1,0 +1,26 @@
+{% extends "base_visitor.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load staticfiles %}
+{% endblock %}
+{% block content %}
+<div class="row-fluid container" style="padding-bottom: 10px; padding-right: 65px"><img class="img-responsive pull-right"
+  src="{% static 'holiday/home_image.png' %}" alt="{{ site_name }}"/>
+  <p class="lead"><strong>Welcome to the {{ site_name }}!<br/>
+  What would you like to do?</strong></p></div>
+  <div class="list-group">
+    <a href="{% url 'holiday.visitor_views.search_children' %}"
+      class="list-group-item lead">Sponsor a child</a>
+    <a href="{% url 'holiday.visitor_views.search_families' %}"
+      class="list-group-item lead">Sponsor a family</a>
+    <a href="{% url 'holiday.visitor_views.search_programs' %}"
+    class="list-group-item lead">Sponsor a group of kids living in our care</a>
+    <a href="{% url 'holiday.visitor_views.search_general' %}"
+    class="list-group-item lead">Donate gifts on the general wishlist</a>
+    <a href="{{ cash_donation_link }}"
+    class="list-group-item lead">Make a cash donation online</a>
+  </div>
+{% endblock %}

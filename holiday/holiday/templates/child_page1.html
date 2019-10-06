@@ -1,0 +1,3 @@
+{% extends "base_child.html" %}
+{% block pretitle %}{% if edit_kid %}Edit Child {{ edit_kid }}{% else %}Add Child {{ add_kid }}{% endif%} - Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}{% endblock %}
+

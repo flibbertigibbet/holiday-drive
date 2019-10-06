@@ -1,0 +1,116 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block extrasrc %}
+  {% load static %}
+  {% load jstemplate %}
+  <script src="{% static 'holiday/js/viewfamilies.min.handlebars' %}"></script>
+{% endblock %}
+{% load staticfiles %}
+{% block pretitle %}<div id="pretitle"></div>{% endblock %}
+{% block content %}
+  <form id="myform" action="." method="post">{% csrf_token %}
+  <!-- Modal -->
+  <div class="modal fade" id="submitModal" tabindex="-1" role="dialog" 
+    aria-labelledby="Are you sure?" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" 
+            data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Are you sure?</h4>
+        </div>
+        <div id="submit-modal-body" class="modal-body lead">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" 
+            data-dismiss="modal">Cancel</button>
+          <button type="submit" id="submit-button"
+            class="btn btn-primary">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-group" id="accordion">
+    <a id="loadBtn" class="list-group-item btn btn-default" 
+    href="javascript:void(0)" onclick="loadMore()">
+    <div class="list-group-item-heading lead" 
+    style="color:grey;">Show more results</div></a>
+  <li id="waitAnimation" hidden="true" class="list-group-item"><img
+    class="img-responsive" style="margin:0 auto;" 
+    src="{% static 'holiday/ajax-loader.gif' %}"></li>
+  </div>
+  </form>
+{% endblock %}
+{% block extrascript %}
+  var alreadyLoading = false;
+var resultPage = 1;
+var json_url = "{{ json_url }}";
+function loadMore() {
+  alreadyLoading = true;
+  $('#loadBtn').hide();
+  $('#waitAnimation').show();
+  addResults();
+  //window.setTimeout(addResults, 1000); // test loading animation
+}
+function addResults() {
+  $.getJSON(json_url + resultPage, function(data) {
+    data = data['staff_families'];
+    var resultCt = data['count']; // total result count
+    var lastPage = data['last_page'];
+    var resultMsg = '';
+    if (resultPage == 1) {
+      if (resultCt > 1) {
+        resultMsg = "View the " + resultCt.toString() + " families in {{ program }}";
+      } else if (resultCt == 0) {
+        resultMsg = "No families found in {{ program }}";
+      } else {
+        resultMsg = "View the " + resultCt.toString() + " family in {{ program }}";
+      }
+      {% if need_approval %}resultMsg += " awaiting approval";{% endif %}
+      $('#pretitle').html(resultMsg);
+    }
+    var html = Handlebars.templates['viewfamilies'](data);
+    console.log(data);
+    
+    $('#loadBtn').before(html);
+    $("a").tooltip();
+    $('.view-kids').tooltip();
+    $('.approved').tooltip();
+    resultPage += 1;
+    $('#waitAnimation').hide();
+    if (!lastPage) {
+      $('#loadBtn').show();
+      alreadyLoading = false; // leave true if no more results to fetch
+    } }); }
+$(window).scroll(function() { if ($(document).height() <= ($(window).height() + 
+    $(window).scrollTop() + 80)) { if (!alreadyLoading) loadMore(); } });
+  jQuery(function ($) {
+    $("a").tooltip()
+  });
+  $(document).ready(function() {
+    $('.view-kids').tooltip();
+    $('.approved').tooltip();
+    if (!alreadyLoading) loadMore(); // get first page of results
+  });
+  function confirm_change(fam_id, do_what) {
+    var myModal = document.getElementById("submitModal");
+    var modalText = document.getElementById("submit-modal-body");
+    var submitBtn = document.getElementById("submit-button");   
+    var do_txt = "";
+    if (do_what == 'approve') {
+      do_txt = do_what;
+    } else {
+      do_txt = 'remove approval for';
+    }      
+    modalText.innerHTML = "Are you sure you want to " + do_txt +
+      " family #" + fam_id + " now?";
+    submitBtn.name = do_what;
+    submitBtn.value = fam_id;
+    $('#submitModal').modal({ keyboard: false });
+    return;
+  }
+  // make sure modal background goes away when dismissed
+  $('#submitModal').on('hide.bs.modal', function () {
+    $('.modal-backdrop').remove(); 
+  });
+{% endblock %}

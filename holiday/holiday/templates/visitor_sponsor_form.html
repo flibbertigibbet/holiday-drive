@@ -1,0 +1,88 @@
+{% extends "base_visitor.html" %}
+{% load i18n %}
+{% block extrasrc %}
+{% load static %}
+<script src="{% static 'holiday/js/jquery.mask.min.js' %}"></script>
+<script src="{% static 'holiday/js/mailcheck.min.js' %}"></script>
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% endblock %}
+{% block content %}
+  <p class="lead"><strong>Sponsor Information</strong></p>
+  <p>Thank you for choosing to sponsor {{ title }}!  Please provide your contact information below.</p>
+  {% if form.errors and not form.non_field_errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% else %}
+    {% if form.non_field_errors %}
+      {% for error in form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+  <form id="myform" class="form" action="." method="post">
+    {% csrf_token %}
+    {% block fields %}
+      <div class="form-group">
+      {% bootstrap_form form %}
+      </div>
+      {% if item_form %}
+        <div class="form-group">
+        {% bootstrap_form item_form %}
+        </div>
+      {% endif %}
+    {% endblock %}
+  <div class="btn-toolbar">
+    <div class="btn-group">
+    <button type="submit" class="btn btn-primary">{% trans 'submit' %} {% bootstrap_icon "chevron-up" %}</button></div></div>
+  </form>
+{% endblock %}
+{% block extrascript %}
+  $(document).ready(function(){ 
+    {% if item_form %}
+    $('#id_donor-phone_number').mask('(000) 000-0000'); 
+    $('#id_donor-zip_code').mask('00000-9999');
+    {% else %}
+    $('#id_phone_number').mask('(000) 000-0000'); 
+    $('#id_zip_code').mask('00000-9999');
+    {% endif %}
+  });
+$('#id_email_address').on('blur', function() {
+  $(this).mailcheck({
+    suggested: function(element, suggestion) {
+      // callback code
+      $('#id_email_address').tooltip('destroy');
+      $('#id_email_address').tooltip({placement:'auto bottom', 
+        html:true, trigger: 'manual',
+        title:"Did you mean <em>" + suggestion['full'] + "</em>?"}).tooltip('show');
+      $('#id_email_address').parent().addClass('has-error');
+    },
+    empty: function(element) {
+      // callback code
+      $('#id_email_address').tooltip('destroy');
+      $('#id_email_address').parent().removeClass('has-error');
+    }
+  });
+});
+$('#id_donor-email_address').on('blur', function() {
+  $(this).mailcheck({
+    suggested: function(element, suggestion) {
+      // callback code
+      $('#id_donor-email_address').tooltip('destroy');
+      $('#id_donor-email_address').tooltip({
+        placement:'auto bottom', html:true, trigger: 'manual',
+        title:"Did you mean <em>" + suggestion['full'] + "</em>?"}).tooltip('show');
+      $('#id_donor-email_address').parent().addClass('has-error');
+    },
+    empty: function(element) {
+      // callback code
+      $('#id_donor-email_address').tooltip('destroy');
+      $('#id_donor-email_address').parent().removeClass('has-error');
+    }
+  });
+});
+{% endblock %}

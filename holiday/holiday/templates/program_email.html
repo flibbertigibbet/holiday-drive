@@ -1,0 +1,27 @@
+{% extends "email.html" %}
+{% block wishes %}
+<h2>{{ item_description }}'s Wishlist Summary:</h2>
+<ul>
+{% for wish in wishlist_items %}
+  <li>{{ wish.category__category }} - 
+    {{ wish.item__item_name }}: 
+    {{ wish.item_count }}</li>
+{% endfor %}
+{% for other_wish in wishlist_other_items %}
+  <li>{{ other_wish.category__category }} - 
+    {{ other_wish.other_item }}: 
+    {{ other_wish.other_item_count }}</li>
+{% endfor %}
+</ul><br />
+{% if wishlist %}
+  {% regroup wishlist by child as wishes %}
+  <h2>{{ item_description }}'s Detailed Wishlist:</h2>
+  {% for kid in wishes %}
+  <h3><strong>Child ID {{ kid.grouper.id }} - {{ kid.grouper.gender }}, {{ kid.grouper.age }} years old</strong><br />
+  Clothing size:  {{ kid.grouper.clothing_size }}</h3>
+  <ul>{% for wish in kid.list %}
+    <li>{{ wish }}{% if wish.notes %}<br />
+    notes: {{ wish.notes }}{% endif %}</li>
+  {% endfor %}</ul><br />{% endfor %}
+{% endif %}
+{% endblock %}

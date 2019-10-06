@@ -1,0 +1,23 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% endblock %}
+{% block pretitle %}Add another child to family {{ family_id }}?{% endblock %}
+{% block content %}
+{{ form.non_field_errors }}
+  <form id="myform" action="." method="post">
+    {% csrf_token %}
+    {% block fields %}
+    {% block startform %}
+    {% endblock %}
+  <button type="submit" name="yes" value="True" 
+    class="btn btn-success btn-lg btn-block">Yes, add another child</button>
+  <button type="submit" name="no" value="False" 
+    class="btn btn-danger btn-lg btn-block">No, finished adding family</button>
+</form>
+{% endblock %}
+{% endblock %}
+

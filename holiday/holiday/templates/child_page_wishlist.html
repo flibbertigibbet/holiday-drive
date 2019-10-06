@@ -1,0 +1,125 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% endblock %}
+{% block pretitle %}{% if edit_kid %}Edit Child {{ edit_kid }}{% else %}Add Child {{ add_kid }}{% endif%} - Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}{% endblock %}
+{% block content %}
+  {% if form.errors and not form.non_field_errors and not form.non_form_errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% endif %}
+    
+  {% if form.non_form_errors %}
+    {% for error in form.non_form_errors %}
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+    {% endfor %}
+  {% endif %}
+  
+<form id="myform" action="." method="post">
+  {% csrf_token %}
+  {% block fields %}
+  <ul class="list-group">
+      {% for f in form %}
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+          <div class="alert alert-danger">
+            {{ error }}
+          </div>
+          {% endfor %}
+        {% endif %}
+       <li class="list-group-item">
+        <h4><span class="label label-default">Wish List Item #{{ forloop.counter }}</span></h4>
+        <!-- {% bootstrap_form f %} -->
+        {{ f.id }}
+        {% bootstrap_field f.child %}
+        {% bootstrap_field f.category %}
+        {% bootstrap_field f.item %}        
+          <div class="form-group{% if f.other_item.errors %} has-error{% endif %}">
+            <label for="other_group">Other item (not in list above)</label>
+            <div class="input-group" name="other_group" id="other_group">
+              <span class="input-group-addon">
+                <input type="checkbox" id="id_page_wishlist-{{ forloop.counter0 }}-have_other" 
+                  name="page_wishlist-{{ forloop.counter0 }}-have_other"></span>
+                <input type="text" class="form-control" 
+                  id="id_page_wishlist-{{ forloop.counter0 }}-other_item" placeholder="Other item"
+                  name="page_wishlist-{{ forloop.counter0 }}-other_item" 
+                  value="{{ f.other_item.value|default_if_none:'' }}"> 
+              </span>
+            </div>
+            {% if f.other_item.errors %}<span 
+              class="help-block">{{ f.other_item.errors }}</span>
+            {% endif %}
+          </div>
+        <div class="form-group{% if f.notes.errors %} has-error{% endif %}">
+          <label>Notes</label>
+          <textarea id="id_page_wishlist-{{ forloop.counter0 }}-notes" class="form-control"
+            placeholder="(Favorite color, TV show/character, ethnicity, etc.)" 
+            name="page_wishlist-{{ forloop.counter0 }}-notes" 
+            maxlength="200">{{ f.notes.value|default_if_none:"" }}</textarea>
+            {% if f.other_item.errors %}<span 
+              class="help-block">{{ f.notes.errors }}</span>
+            {% endif %}
+        </div>
+       </li>
+      {% endfor %}
+  </ul>
+  {% endblock %}
+  {{ wizard.management_form }}
+  {{ wizard.form.management_form }}
+  <div class="btn-toolbar">
+  {% if wizard.steps.prev %}
+     <div class="btn-group">
+    <button name="wizard_goto_step" type="submit" class="pull-left btn btn-default"
+      value="{{ wizard.steps.first }}">{% bootstrap_icon "fast-backward" %} {% trans "first" %}</button>
+    </div>
+    <div class="btn-group">
+    <button name="wizard_goto_step" class="btn btn-default" type="submit" 
+      value="{{ wizard.steps.prev }}">{% bootstrap_icon "chevron-left" %} {% trans "previous" %}</button>
+    </div>
+  {% endif %}
+  {% if wizard.steps.next %}
+    <button type="submit" class="pull-right btn btn-primary">{% trans 'next' %} {% bootstrap_icon "chevron-right" %}</button>
+  {% else %}
+    <button type="submit" class="pull-right btn btn-success">{% trans 'submit' %} {% bootstrap_icon "chevron-up" %}</button>
+  {% endif %}
+  </div>
+</form>
+{% endblock %}
+{% block extrascript %}
+  function enableDisableCheckbox(valueId, showHideId, itemId) {
+    if (document.getElementById(valueId).checked) {
+      document.getElementById(showHideId).disabled = false;
+      document.getElementById(itemId).disabled = true;
+      document.getElementById(itemId).value = "";
+    } else {
+      document.getElementById(showHideId).value = "";
+      document.getElementById(showHideId).disabled = true;
+      document.getElementById(itemId).disabled = false;
+    }
+  }
+  window.onload = function() {
+    {% for f in form %}
+      var haveOther = document.getElementById("id_page_wishlist-{{ forloop.counter0 }}-have_other");
+      var otherItem = document.getElementById("id_page_wishlist-{{ forloop.counter0 }}-other_item");
+      var listedItem = document.getElementById("id_page_wishlist-{{ forloop.counter0 }}-item");
+      {% if f.have_other.value %}
+        // have 'other' value
+        haveOther.checked = true;
+        listedItem.disabled = true;
+      {% else %}
+        // disable 'other' by default
+        otherItem.disabled = true; 
+      {% endif %}      
+      haveOther.onchange = function() { 
+          enableDisableCheckbox("id_page_wishlist-{{ forloop.counter0 }}-have_other", 
+          "id_page_wishlist-{{ forloop.counter0 }}-other_item", "id_page_wishlist-{{ forloop.counter0 }}-item"); 
+      };
+    {% endfor %}
+  }
+{% endblock %}

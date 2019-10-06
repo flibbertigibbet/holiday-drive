@@ -1,0 +1,28 @@
+{% extends "base_visitor.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  {% load staticfiles %}
+{% endblock %}
+{% block content %}
+  <p class="lead"><strong>Thank you! We're sending you an e-mail with the information below.<br />
+  <a href="{% url 'holiday.visitor_views.holiday_drive' %}" class="btn btn-success btn-lg btn-block" 
+  data-original-title="You won't have to enter your contact information again." 
+    rel="tooltip">Want to sponsor another?</a><br />
+    Please label your donation: {{ donation_label }}</strong><br />
+    You can drop off your donation at any of the following locations:</p>
+  <div class="list-group">
+    {% for location in donation_dropoff_locations %}
+    <li class="list-group-item"><p class="list-group-item-heading lead">{{ location.name }}</p>
+      <p class="list-group-item-text">{{ location.address_1 }} {% if location.map_link %}(<a target="_blank"
+      href="{{ location.map_link }}">map</a>){% endif %}<br />{% if location.address_2 %}{{ location.address_2 }}<br />{% endif %}{{ location.hours_1 }}<br />{{ location.hours_2 }}</p></li>
+    {% endfor %}
+  </div>
+{% endblock %}
+{% block extrascript %}
+  jQuery(function ($) {
+    $("a").tooltip();
+  });
+{% endblock %}

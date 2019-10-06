@@ -1,0 +1,50 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block extrasrc %}
+  {% load static %}
+  <script src="{% static 'holiday/js/jquery.mask.min.js' %}"></script>
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% endblock %}
+{% block pretitle %}Welcome!  Please provide some additional information...{% endblock %}
+{% block content %}
+  {% if form.errors and not form.non_field_errors and not form.non_form_errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% endif %}
+    
+  {% if form.non_form_errors %}
+    {% for error in form.non_form_errors %}
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+    {% endfor %}
+  {% endif %}
+  
+<form id="myform" action="." method="post">
+  {% csrf_token %}
+  {% block fields %}
+  {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  {% bootstrap_form form %}
+  
+  {% endblock %}
+
+  <div class="btn-toolbar">
+    <div class="btn-group">
+    <button type="submit" class="pull-right btn btn-primary">{% trans 'submit' %} {% bootstrap_icon "chevron-up" %}</button>
+  </div>
+</form>
+{% endblock %}
+{% block extrascript %}
+  $(document).ready(function(){ $('#id_phone_number').mask('(000) 000-0000'); });
+{% endblock %}
+

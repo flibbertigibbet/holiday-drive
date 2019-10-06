@@ -1,0 +1,142 @@
+{% load url from future %}{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head><title>{% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  {% block extrastyle %}
+  {% endblock %}
+  {% load static %}
+  <script src="{% static 'holiday/js/jquery-1.11.1.min.js' %}"></script>
+  <script src="{% static 'holiday/js/handlebars.runtime-v2.0.0.min.js' %}"></script>
+  {% block extrasrc %}
+  {% endblock %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+  <style type="text/css">
+    body {
+      padding-top: 70px;
+      padding-bottom: 40px;
+    }
+    .tooltip.in {opacity: 1} /* Hard to see against black text otherwise */
+  </style>
+  {% block extrahead %}{% endblock %}
+  {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}    
+</head>
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" 
+  aria-labelledby="Are you sure?" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Are you sure?</h4>
+      </div>
+      <div id="modal-body" class="modal-body lead">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a type="button" href="#" id="confirm-button"
+            class="btn btn-primary">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+<body 
+  class="{% if is_popup %}popup{% endif %}{% block bodyclass %}{% endblock %}">
+<!-- Container -->
+<div class="container">
+  {% if not is_popup %}
+  <!-- Header -->
+  <div class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {% block branding %}<a class="navbar-brand navbar-left" 
+        href="{% url 'holiday.views.programstaff_start' %}">Holiday Drive Staff Site</a>{% endblock %} 
+    </div>
+    <div class="navbar-collapse collapse navbar-right">
+      <ul class="nav navbar-nav navbar-right">
+        {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans 'Welcome,' %} <strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong> <b class="caret"></b></a>
+          <ul class="dropdown-menu" role="menu">
+            {% if user.has_usable_password %}
+            <li><a href="javascript:void(0)" onclick="change_password()">{% trans 'Change password' %}</a></li>
+            {% endif %}
+            <li><a href="javascript:void(0)" onclick="logout()">{% trans 'Log out' %}</a></li>
+          </ul>
+        </li>
+        {% block userlinks %}
+        {% endblock %}
+        {% else %}
+          <li class="dropdown">
+            <a href="#">Not logged in</a></li>
+        {% endif %}
+        {% block nav-global %}{% endblock %}
+      </ul>
+    </div><!--/.navbar-collapse -->
+  </div>
+  <!-- END Header -->
+  {% endif %}
+  <!-- Content -->
+  <div id="content" class="{% block coltype %}colM{% endblock %}">
+    <div class="panel panel-primary">
+      <div class="panel-heading lead"><strong>{% block pretitle %}{% endblock %}</strong></div>
+      <div class="panel-body">
+        {% block messages %}
+        {% if messages %}
+        <div class="row">
+          <div class="span12">
+            <div class="alert alert-info">
+              <ul class="unstyled">
+                  {% for message in messages %}
+                  <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endblock messages %}
+      {% block content %}{{ content }}{% endblock %}
+      </div> <!-- end panel -->
+    {% block sidebar %}{% endblock %}
+  </div>
+  <!-- END Content -->
+  {% block footer %}<footer id="footer"></footer>{% endblock %}
+</div>
+<!-- END Container -->
+{% block script %}
+<script type="text/javascript">
+  function logout() {
+    var modal = document.getElementById("modal-body");
+    var btn = document.getElementById("confirm-button");
+    modal.innerHTML = "Are you sure you want to log out now?";
+    btn.href = "{% url 'holiday.views.logout_page' %}";
+    $('#confirmModal').modal({ keyboard: false });
+    return;
+  }
+  function change_password() {
+    var modal = document.getElementById("modal-body");
+    var btn = document.getElementById("confirm-button");
+    modal.innerHTML = 
+      "Are you sure you want to change your password now?";
+    btn.href = "/password_change/";
+    $('#confirmModal').modal({ keyboard: false });
+    return;
+  }
+  // make sure modal background goes away when dismissed
+  $('#confirmModal').on('hide.bs.modal', function () {
+    $('.modal-backdrop').remove(); 
+  });
+  {% block extrascript %}
+  {% endblock %}
+</script>
+{% endblock %}
+</body>
+</html>
+

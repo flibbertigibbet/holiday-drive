@@ -1,0 +1,43 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% endblock %}
+{% block pretitle %}Child - Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}{% endblock %}
+{% block content %}
+<form id="myform" action="." method="post">
+  {% csrf_token %}
+  {% block fields %}
+  {% block startform %}
+  {% endblock %}
+  {% if form.errors and not form.non_field_errors %}
+    <div class="alert alert-danger">
+       {% blocktrans count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktrans %}
+    </div>
+  {% endif %}
+  {% bootstrap_form form %}
+  {% endblock %}
+  {{ wizard.management_form }}
+  {{ wizard.form.management_form }}
+  <div class="btn-toolbar">
+  {% if wizard.steps.prev %}
+     <div class="btn-group">
+    <button name="wizard_goto_step" type="submit" class="pull-left btn btn-default"
+      value="{{ wizard.steps.first }}">{% bootstrap_icon "fast-backward" %} {% trans "first" %}</button>
+    </div>
+    <div class="btn-group">
+    <button name="wizard_goto_step" class="btn btn-default" type="submit" 
+      value="{{ wizard.steps.prev }}">{% bootstrap_icon "chevron-left" %} {% trans "previous" %}</button>
+    </div>
+  {% endif %}
+  {% if wizard.steps.next %}
+    <button type="submit" class="pull-right btn btn-primary">{% trans 'next' %} {% bootstrap_icon "chevron-right" %}</button>
+  {% else %}
+    <button type="submit" class="pull-right btn btn-success">{% trans 'submit' %} {% bootstrap_icon "chevron-up" %}</button>
+  {% endif %}
+  </div>  
+</form>
+{% endblock %}
+

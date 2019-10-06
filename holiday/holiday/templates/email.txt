@@ -1,0 +1,34 @@
+{{ site_name }}
+
+Thank you for your sponsorship, {{ donor }}!
+We've received your request to sponsor {{ item_description }} in this year's holiday drive.  Please keep in mind that we can only accept new items, and that gifts should not be wrapped.  If you have any questions, please email us at:  {{ donor_contact_email }}.
+
+Gifts are sorted to ensure all children receive gifts.
+
+Please label your donation:  {{ item_label }}.
+
+Information about {{ item_description }}:
+{% for info in item_information %}
+{{ info }}{% endfor %}
+{% block wishes %}{% if wishlist %}{% regroup wishlist by child as wishes %}
+{{ item_description }}'s Wishlist:{% for kid in wishes %}
+Child ID {{ kid.grouper.id }} - {{ kid.grouper.gender }}, {{ kid.grouper.age }} years old
+Clothing size:  {{ kid.grouper.clothing_size }}{% for wish in kid.list %}
+  * {{ wish }}{% if wish.notes %}
+    notes: {{ wish.notes }}{% endif %}{% endfor %}
+{% endfor %}{% endif %}
+{% endblock %}
+------------------
+Drop-Off Locations
+------------------
+You can drop off your donation at any of the following locations by {{ dropoff_final_date }}:
+
+{% for location in donation_dropoff_locations %}
+{{ location.name }}
+{{ location.address_1 }}
+{% if location.address_2 %}{{ location.address_2 }}{% endif %}
+{{ location.hours_1 }}
+{% if location.hours_2 %}{{ location.hours_2 }}{% endif %}
+{% endfor %}
+
+Thanks again!

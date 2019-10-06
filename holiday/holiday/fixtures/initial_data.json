@@ -1,0 +1,548 @@
+[
+  {
+    "fields": {
+      "program_type": "Test Program Type One"
+    },
+    "model": "holiday.programtype",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "program_type": "Test Program Type Two"
+    },
+    "model": "holiday.programtype",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "program_name": "Test Program One",
+      "program_type": [
+        1
+      ],
+      "program_site": "http://example.com",
+      "adopt_group_only": false
+    },
+    "model": "holiday.program",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "program_name": "Test Program Two",
+      "program_type": [
+        1
+      ],
+      "program_site": "http://example.com",
+      "adopt_group_only": false
+    },
+    "model": "holiday.program",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "program_name": "Test Program Three",
+      "program_type": [
+        2
+      ],
+      "program_site": "http://example.com",
+      "adopt_group_only": true
+    },
+    "model": "holiday.program",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "category": "Clothing",
+      "position": 0
+    },
+    "model": "holiday.wishlistitemcategory",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "category": "Toy",
+      "position": 0
+    },
+    "model": "holiday.wishlistitemcategory",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "category": "Book",
+      "position": 0
+    },
+    "model": "holiday.wishlistitemcategory",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "category": "Sports Equipment",
+      "position": 0
+    },
+    "model": "holiday.wishlistitemcategory",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "category": "Gift Card",
+      "position": 0
+    },
+    "model": "holiday.wishlistitemcategory",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "category": 1,
+      "position": 0,
+      "item_name": "Winter Coat"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "category": 1,
+      "position": 0,
+      "item_name": "PJs"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "category": 1,
+      "position": 0,
+      "item_name": "Hoodie"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Car"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Truck"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Train"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Baby Doll"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Barbie Doll"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Action Figure"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 9
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Educational Toy"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 10
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Stuffed Animal"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 11
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Nerf"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 12
+  },
+  {
+    "fields": {
+      "category": 2,
+      "position": 0,
+      "item_name": "Legos"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 13
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "Journal"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 14
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "Comic"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 15
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "Theme or Character Specific"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 16
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "at grade level"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 17
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "above grade level"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 18
+  },
+  {
+    "fields": {
+      "category": 3,
+      "position": 0,
+      "item_name": "below grade level"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 19
+  },
+  {
+    "fields": {
+      "category": 4,
+      "position": 0,
+      "item_name": "Basketball"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 20
+  },
+  {
+    "fields": {
+      "category": 4,
+      "position": 0,
+      "item_name": "Baseball/Glove"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 21
+  },
+  {
+    "fields": {
+      "category": 4,
+      "position": 0,
+      "item_name": "Football"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 22
+  },
+  {
+    "fields": {
+      "category": 4,
+      "position": 0,
+      "item_name": "Soccer"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 23
+  },
+  {
+    "fields": {
+      "category": 4,
+      "position": 0,
+      "item_name": "Skateboard"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 24
+  },
+  {
+    "fields": {
+      "category": 5,
+      "position": 0,
+      "item_name": "Target"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 25
+  },
+  {
+    "fields": {
+      "category": 5,
+      "position": 0,
+      "item_name": "Wal-Mart"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 26
+  },
+  {
+    "fields": {
+      "category": 5,
+      "position": 0,
+      "item_name": "Mall"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 27
+  },
+  {
+    "fields": {
+      "category": 5,
+      "position": 0,
+      "item_name": "Movie Theater"
+    },
+    "model": "holiday.wishlistitem",
+    "pk": 28
+  },
+  {
+    "fields": {
+      "position": 2,
+      "size_category": "Adult"
+    },
+    "model": "holiday.clothingsizecategory",
+    "pk": "A"
+  },
+  {
+    "fields": {
+      "position": 0,
+      "size_category": "Children"
+    },
+    "model": "holiday.clothingsizecategory",
+    "pk": "N"
+  },
+  {
+    "fields": {
+      "position": 1,
+      "size_category": "Youth"
+    },
+    "model": "holiday.clothingsizecategory",
+    "pk": "Y"
+  },
+  {
+    "fields": {
+      "position": 0,
+      "size_category": "N",
+      "clothing_size": "Newborn"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 1
+  },
+  {
+    "fields": {
+      "position": 1,
+      "size_category": "N",
+      "clothing_size": "0-3 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 2
+  },
+  {
+    "fields": {
+      "position": 2,
+      "size_category": "N",
+      "clothing_size": "3-6 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 3
+  },
+  {
+    "fields": {
+      "position": 3,
+      "size_category": "N",
+      "clothing_size": "6-9 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "position": 4,
+      "size_category": "N",
+      "clothing_size": "9-12 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "position": 5,
+      "size_category": "N",
+      "clothing_size": "12-18 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "position": 6,
+      "size_category": "N",
+      "clothing_size": "18-24 months"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "position": 7,
+      "size_category": "N",
+      "clothing_size": "2T"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "position": 8,
+      "size_category": "N",
+      "clothing_size": "3T"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 9
+  },
+  {
+    "fields": {
+      "position": 9,
+      "size_category": "N",
+      "clothing_size": "4T"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 10
+  },
+  {
+    "fields": {
+      "position": 10,
+      "size_category": "N",
+      "clothing_size": "5T"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 11
+  },
+  {
+    "fields": {
+      "position": 0,
+      "size_category": "Y",
+      "clothing_size": "Small (5-6)"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 12
+  },
+  {
+    "fields": {
+      "position": 1,
+      "size_category": "Y",
+      "clothing_size": "Medium (7-8)"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 13
+  },
+  {
+    "fields": {
+      "position": 2,
+      "size_category": "Y",
+      "clothing_size": "Large (10-12)"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 14
+  },
+  {
+    "fields": {
+      "position": 3,
+      "size_category": "Y",
+      "clothing_size": "Extra Large (12-14)"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 15
+  },
+  {
+    "fields": {
+      "position": 0,
+      "size_category": "A",
+      "clothing_size": "Small"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 16
+  },
+  {
+    "fields": {
+      "position": 1,
+      "size_category": "A",
+      "clothing_size": "Medium"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 17
+  },
+  {
+    "fields": {
+      "position": 2,
+      "size_category": "A",
+      "clothing_size": "Large"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 18
+  },
+  {
+    "fields": {
+      "position": 3,
+      "size_category": "A",
+      "clothing_size": "Extra Large"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 19
+  },
+  {
+    "fields": {
+      "position": 4,
+      "size_category": "A",
+      "clothing_size": "XXL"
+    },
+    "model": "holiday.clothingsize",
+    "pk": 20
+  }
+]

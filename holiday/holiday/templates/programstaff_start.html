@@ -1,0 +1,61 @@
+{% extends "base_programstaff.html" %}
+{% load i18n %}
+{% block head %}
+  {% load bootstrap3 %}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+{% endblock %}
+{% block pretitle %}Staff Main Page for {{ program }}{% endblock %}
+{% block content %}
+  <p> This year we will only be able to provide winter coats, pajamas/sleepwear, books, and age-appropriate toys.</p>
+  <div class="list-group">
+    <a href="{% url 'holiday.views.add_child_check' %}" class="list-group-item lead">Add Child</a>
+    <a href="javascript:void(0)" 
+      onclick="confirm_add_family()" class="list-group-item lead">Add Family</a>
+    <a href="{% url 'holiday.views.view_children' %}" 
+      class="list-group-item lead">View Children</a>
+    <a href="{% url 'holiday.views.view_families' %}" 
+      class="list-group-item lead">View Families</a>
+    {% if form %}
+      <a class="list-group-item lead accordion-toggle" data-toggle="collapse"
+          href="#collapseSwitch" 
+          data-parent="#accordion">Change Program View</a>
+      <div id="collapseSwitch" class="panel-collapse collapse">
+        <div class="panel-body"><div class="list-group"><div class="list-group-item collapse">
+          <form id="myform" action="." method="post">{% csrf_token %}
+            {% bootstrap_form form %}
+          </form></div></div></div>
+      </div>
+    {% endif %}
+    {% if is_director %}
+      <a href="{% url 'holiday.views.view_children' %}Z/F" class="list-group-item lead">View Children Awaiting Approval</a>
+      <a href="{% url 'holiday.views.view_families' %}F"
+        class="list-group-item lead">View Families Awaiting Approval</a>
+    {% endif %}
+  </div>
+{% endblock %}
+{% block extrascript %}
+  function confirm_add_family() {
+    var modal = document.getElementById("modal-body");
+    var modal_btn = document.getElementById("confirm-button");
+    modal.innerHTML = "Are you sure you want to add a new family now?";
+    modal_btn.href = "{% url 'holiday.views.add_new_family' %}";
+    $('#confirmModal').modal({ keyboard: false });
+    return;
+  }
+  $('#id_programs').change(function() {
+    if ($(this).val()) {
+      var modal = document.getElementById("modal-body");
+      var modal_btn = document.getElementById("confirm-button");
+      modal.innerHTML = "Are you sure you want to manage the program " + 
+        $(this).children('option').filter(':selected').text() + " now?";
+      $('#confirm-button').click( function(e) {
+        $('#confirmModal').modal('hide');
+        $('#myform').submit();
+        return false;
+      });
+      $('#confirmModal').modal({ keyboard: false });
+    }
+  });
+{% endblock %}
+
