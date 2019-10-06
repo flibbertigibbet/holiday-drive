@@ -1,0 +1,10 @@
+# results in larger template
+#{% handlebarsjs "searchkids" precompile %}
+# handlebars searchkids.handlebars -f searchkids_compiled.handlebars -k each -k i#f -k with
+
+#uglifyjs -o searchkids.min.handlebars searchkids_compiled.handlebars 
+
+# alternatively, more efficient
+# minify with handlebars using -m, and use -o to only compile known helpers
+handlebars viewchildren.handlebars -f viewchildren_compiled.handlebars -o -k each -k if -k with -m
+
