@@ -1,4 +1,4 @@
-Django==2.2.24
+Django==1.11.29
 beautifulsoup4==4.6.3
 django-admin-bootstrapped==2.5.7
 django-bootstrap3==6.2.2
