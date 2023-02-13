@@ -13,5 +13,5 @@ openpyxl==2.4.2
 psycopg2==2.7.5
 python-dateutil==2.7.5
 six==1.11.0
-ipython==7.16.3
+ipython==8.10.0
 django_extensions==1.7.8
